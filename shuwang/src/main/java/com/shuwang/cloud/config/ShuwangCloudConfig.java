@@ -1,10 +1,6 @@
-package com.shuwang.config;
+package com.shuwang.cloud.config;
 
 public class ShuwangCloudConfig {
-	public static String CLOUDPRINT_URL = null;
-	public static String CLOUDPRINT_APPID = null;
-	public static String CLOUDPRINT_APPSECRET = null;
-
 	// mode 打印选项
 	public static int CLOUDPRINT_MODE_NORMAL = 4;//缺省4按订单方式处理
 

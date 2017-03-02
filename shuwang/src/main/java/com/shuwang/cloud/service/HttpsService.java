@@ -1,4 +1,4 @@
-package com.shuwang.service;
+package com.shuwang.cloud.service;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;

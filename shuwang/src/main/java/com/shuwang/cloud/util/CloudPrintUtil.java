@@ -1,4 +1,4 @@
-package com.shuwang.util;
+package com.shuwang.cloud.util;
 
 public class CloudPrintUtil {
 	// 拉宽一倍,拉高一倍

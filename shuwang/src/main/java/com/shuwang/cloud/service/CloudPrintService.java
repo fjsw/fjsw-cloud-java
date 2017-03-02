@@ -1,4 +1,4 @@
-package com.shuwang.service;
+package com.shuwang.cloud.service;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,6 +9,14 @@ import org.slf4j.LoggerFactory;
 public class CloudPrintService {
 	protected final Logger log = LoggerFactory.getLogger(getClass());
 	private GatewayProtocolService gatewayService = new GatewayProtocolService();
+	
+	public boolean isInitialized() {
+		return gatewayService.isInitialized();
+	}
+	
+	public void Initial(String url, String appid, String appsecret) {
+		gatewayService.Initial(url, appid, appsecret);
+	}
 
 	public boolean sendPrint(long printid, int devid, String title, String printStream, int mode) {
 		Map<String, Object> params = new HashMap<String, Object>();

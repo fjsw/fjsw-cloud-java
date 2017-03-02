@@ -1,4 +1,4 @@
-package com.shuwang.util;
+package com.shuwang.cloud.util;
 
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;

@@ -1,4 +1,4 @@
-package com.shuwang.service;
+package com.shuwang.cloud.service;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,16 +10,25 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.shuwang.config.ShuwangCloudConfig;
-import com.shuwang.util.HmacMd5Util;
+import com.shuwang.cloud.util.HmacMd5Util;
 
 public class GatewayProtocolService {
 	protected final Logger log = LoggerFactory.getLogger(getClass());
 	private HttpsService httpService = new HttpsService();
 
-	private String url = ShuwangCloudConfig.CLOUDPRINT_URL;
-	private String appid = ShuwangCloudConfig.CLOUDPRINT_APPID;
-	private String appsecret = ShuwangCloudConfig.CLOUDPRINT_APPSECRET;
+	private String url;
+	private String appid;
+	private String appsecret;
+	
+	public boolean isInitialized() {
+		return (url != null && !url.isEmpty());
+	}
+	
+	public void Initial(String url, String appid, String appsecret) {
+		this.url = url;
+		this.appid = appid;
+		this.appsecret = appsecret;
+	}
 
 	public String callDirect(Map<String, Object> params) {
 		String result = null;
