@@ -1,4 +1,4 @@
-package com.shuwang.test.model;
+package com.shuwang.cloud.test.model;
 
 public class OrderItem {
 	private String name;

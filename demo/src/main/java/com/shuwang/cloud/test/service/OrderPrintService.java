@@ -1,13 +1,14 @@
-package com.shuwang.test.service;
+package com.shuwang.cloud.test.service;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-import com.shuwang.config.ShuwangCloudConfig;
-import com.shuwang.service.CloudPrintService;
-import com.shuwang.test.model.Order;
-import com.shuwang.test.model.OrderItem;
-import com.shuwang.util.CloudPrintUtil;
+import com.shuwang.cloud.config.ShuwangCloudConfig;
+import com.shuwang.cloud.service.CloudPrintService;
+import com.shuwang.cloud.test.config.CloudPringConfig;
+import com.shuwang.cloud.test.model.Order;
+import com.shuwang.cloud.test.model.OrderItem;
+import com.shuwang.cloud.util.CloudPrintUtil;
 
 public class OrderPrintService {
 	private CloudPrintService cloudprintService = new CloudPrintService();
@@ -16,6 +17,11 @@ public class OrderPrintService {
 
 	public boolean printOrder(Long orderid, Integer devid, String title,
 			String printStream) {
+		if (!cloudprintService.isInitialized()) {
+			cloudprintService.Initial(CloudPringConfig.CLOUDPRINT_URL,
+					CloudPringConfig.CLOUDPRINT_APPID,
+					CloudPringConfig.CLOUDPRINT_APPSECRET);
+		}
 		boolean send = cloudprintService.sendPrint(orderid, devid, title,
 				printStream, mode);
 		return send;

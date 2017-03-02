@@ -1,19 +1,15 @@
-package com.shuwang.test;
+package com.shuwang.cloud.test;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.shuwang.config.ShuwangCloudConfig;
-import com.shuwang.test.model.Order;
-import com.shuwang.test.model.OrderItem;
-import com.shuwang.test.service.OrderPrintService;
+import com.shuwang.cloud.test.model.Order;
+import com.shuwang.cloud.test.model.OrderItem;
+import com.shuwang.cloud.test.service.OrderPrintService;
 
 public class Application {
 	public static void main(String[] args) {
-		ShuwangCloudConfig.CLOUDPRINT_URL = "http://api.test.shuwang.info/gateway/rest";
-		ShuwangCloudConfig.CLOUDPRINT_APPID = "12345";
-		ShuwangCloudConfig.CLOUDPRINT_APPSECRET = "xxxxxxxxxxxxxxxxxx";
 		//
 		long orderid = System.currentTimeMillis();
 		int devid = 12039;
