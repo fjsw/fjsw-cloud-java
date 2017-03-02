@@ -5,7 +5,7 @@
 
 	<groupId>com.shuwang</groupId>
 	<artifactId>fjsw-cloud-sdk</artifactId>
-	<version>1.0.0</version>
+	<version>1.0.1</version>
 
 	<!-- 指定 java SDK 的版本 -->
 	<properties>
