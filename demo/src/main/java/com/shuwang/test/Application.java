@@ -1,6 +1,5 @@
 package com.shuwang.test;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -39,15 +38,14 @@ public class Application {
 		
 		//
 		OrderPrintService orderPrintService = new OrderPrintService();
-		try {
+		for (int i=0; i<3; i++) {
 			boolean success = orderPrintService.printOrder(orderid, devid, order);
 			if (success) {
 				System.out.println("success");
+				break;
 			} else {
 				System.out.println("fail");
 			}
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
 		}
 	}
 }
