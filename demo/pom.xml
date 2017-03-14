@@ -3,9 +3,9 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.shuwang</groupId>
+	<groupId>info.shuwang.cloud</groupId>
 	<artifactId>fjsw-cloud-demo</artifactId>
-	<version>1.0.2</version>
+	<version>1.0.3</version>
 
 	<!-- 指定 java SDK 的版本 -->
 	<properties>
@@ -34,9 +34,9 @@
 		
 		<!-- shuwang sdk -->
 		<dependency>
-			<groupId>com.shuwang</groupId>
+			<groupId>info.shuwang.cloud</groupId>
 			<artifactId>fjsw-cloud-sdk</artifactId>
-			<version>1.0.2</version>
+			<version>1.0.3</version>
 		</dependency>
 	</dependencies>
 
@@ -52,5 +52,4 @@
 			<url>https://repo.spring.io/libs-release</url>
 		</pluginRepository>
 	</pluginRepositories>
-	<!-- sifei -->
 </project>

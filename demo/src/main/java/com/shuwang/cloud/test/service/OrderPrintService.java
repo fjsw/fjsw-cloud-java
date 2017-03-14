@@ -18,7 +18,7 @@ public class OrderPrintService {
 	public boolean printOrder(Long orderid, Integer devid, String title,
 			String printStream) {
 		if (!cloudprintService.isInitialized()) {
-			cloudprintService.Initial(CloudPringConfig.CLOUDPRINT_URL,
+			cloudprintService.initial(CloudPringConfig.CLOUDPRINT_URL,
 					CloudPringConfig.CLOUDPRINT_APPID,
 					CloudPringConfig.CLOUDPRINT_APPSECRET);
 		}
