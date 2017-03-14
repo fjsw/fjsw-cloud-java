@@ -24,7 +24,7 @@ public class GatewayProtocolService {
 		return (url != null && !url.isEmpty());
 	}
 	
-	public void Initial(String url, String appid, String appsecret) {
+	public void initial(String url, String appid, String appsecret) {
 		this.url = url;
 		this.appid = appid;
 		this.appsecret = appsecret;

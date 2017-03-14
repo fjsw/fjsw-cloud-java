@@ -14,8 +14,8 @@ public class CloudPrintService {
 		return gatewayService.isInitialized();
 	}
 	
-	public void Initial(String url, String appid, String appsecret) {
-		gatewayService.Initial(url, appid, appsecret);
+	public void initial(String url, String appid, String appsecret) {
+		gatewayService.initial(url, appid, appsecret);
 	}
 
 	public boolean sendPrint(long printid, int devid, String title, String printStream, int mode) {
