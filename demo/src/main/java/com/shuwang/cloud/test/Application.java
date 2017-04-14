@@ -17,7 +17,7 @@ public class Application {
 	public static void main(String[] args) {
 		printOrder();
 		//
-		onPrintStatusCallback("", CloudPringConfig.CLOUDPRINT_APPSECRET);
+		onPrintStatusCallback("{\"sign\":\"0\"}", CloudPringConfig.CLOUDPRINT_APPSECRET);
 	}
 	
 	static void printOrder() {
