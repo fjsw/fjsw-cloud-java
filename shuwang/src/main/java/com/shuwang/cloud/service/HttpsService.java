@@ -16,8 +16,6 @@ import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.gson.Gson;
-
 import javax.net.ssl.SSLContext;
 
 import java.io.IOException;
@@ -39,7 +37,6 @@ import java.util.Set;
  */
 public class HttpsService {
     protected final Logger log = LoggerFactory.getLogger(getClass());
-	private Gson gson = new Gson();
 
     //表示请求器是否已经做了初始化工作
     private boolean hasInit = false;
@@ -68,8 +65,8 @@ public class HttpsService {
         hasInit = true;
     }
     
-    public String jsonPost(String url, Map<String, Object> params) throws UnrecoverableKeyException, KeyManagementException, KeyStoreException, NoSuchAlgorithmException, IOException {
-    	String jsonObj = gson.toJson(params);
+    public String jsonPost(String url, String jsonObj) throws UnrecoverableKeyException, KeyManagementException, KeyStoreException, NoSuchAlgorithmException, IOException {
+    	//String jsonObj = gson.toJson(params);
         log.info("jsonPost() {}", jsonObj);
         if (!hasInit) {
             init();

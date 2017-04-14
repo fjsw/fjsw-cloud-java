@@ -1,80 +1,51 @@
 package com.shuwang.cloud.service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+
+import com.google.gson.Gson;
+import com.shuwang.cloud.util.HmacMd5Util;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.shuwang.cloud.util.HmacMd5Util;
+import java.util.*;
 
 public class GatewayProtocolService {
-	protected final Logger log = LoggerFactory.getLogger(getClass());
-	private HttpsService httpService = new HttpsService();
+	protected static final Logger log = LoggerFactory.getLogger(GatewayProtocolService.class);
+	private static HttpsService http = new HttpsService();
+	private static Gson gson = new Gson();
 
-	private String url;
-	private String appid;
-	private String appsecret;
-	
-	public boolean isInitialized() {
-		return (url != null && !url.isEmpty());
-	}
-	
-	public void initial(String url, String appid, String appsecret) {
-		this.url = url;
-		this.appid = appid;
-		this.appsecret = appsecret;
-	}
-
-	public String callDirect(Map<String, Object> params) {
-		String result = null;
-		try {
-			// call
-			result = httpService.jsonPost(url, params);
-		} catch(Exception ex) {
-			ex.printStackTrace();
-			log.info("callDirect() exception({})", ex.getMessage());
-		}
-		return result;
-	}
-
-	public String callMethod(Map<String, Object> params) {
+	public static String callMethod(Map<String, Object> params,String appid,String appsecret,String gatewayUrl) {
 		params.put("appid", appid);
 		params.put("timestamp", String.valueOf(System.currentTimeMillis()/1000));
 		// sign
-		String signature = signRequest(params);
+		String signature = signRequest(params,appsecret);
 		params.put("sign", signature);
-		//
-		String result = null;
-		try {
-			// call
-			result = httpService.jsonPost(url, params);
-		} catch(Exception ex) {
-			ex.printStackTrace();
-			log.info("callMethod() exception({})", ex.getMessage());
-		}
-		return result;
-	}
-	
-	public String getAppid() {
-		return appid;
+		// call
+		return callDirect(params,gatewayUrl);
 	}
 
-	public String signRequest(Map<String, Object> params) {
+	public static String signRequest(Map<String, Object> params,String appsecret) {
 		// sort keys
 		List<Map.Entry<String, Object>> list = new ArrayList<Map.Entry<String, Object>>();
 		list.addAll(params.entrySet());
 		KeyComparator kc = new KeyComparator();
 		Collections.sort(list, kc);
-		// 把所有参数名和参数�?�串在一�?
+		// 把所有参数名和参数值串在一起
 		StringBuilder query = new StringBuilder();
 		for (Iterator<Map.Entry<String, Object>> it = list.iterator(); it.hasNext();) {
 			Map.Entry<String, Object> item = it.next();
-			query.append(item.getKey()).append(item.getValue());
+			Object value = item.getValue();
+			if (value == null) {
+				;
+			}
+			else if (value instanceof String) {
+				String string_value = (String) value;
+				if (!string_value.isEmpty()) {
+					query.append(item.getKey()).append(string_value);
+				}
+			} else {
+				query.append(item.getKey()).append(value);
+			}
 		}
 		log.debug("query={}", query.toString());
 		// 第三步：使用MD5/HMAC加密
@@ -86,12 +57,34 @@ public class GatewayProtocolService {
 		}
 		return sign;
 	}
+	
+	public static boolean checkSignEqual(Map<String, Object> data,String appsecret) {
+		String sign = (String) data.get("sign");
+		if (sign == null || sign.isEmpty()) {
+			return false;
+		}
+		//
+		data.remove("sign");
+		String signRequest = signRequest(data,appsecret);
+		return sign.equals(signRequest);
+	}
 
 	private static class KeyComparator implements
 			Comparator<Map.Entry<String, Object>> {
 		public int compare(Map.Entry<String, Object> m,
 				Map.Entry<String, Object> n) {
 			return m.getKey().compareTo(n.getKey());
+		}
+	}
+	
+	public static String callDirect(final Map<String, Object> params,String url) {
+		String jsonObject = gson.toJson(params);
+		try {
+			String text = http.jsonPost(url,jsonObject);
+			return text;
+		}catch (Exception e){
+			e.printStackTrace();
+			return e.getMessage();
 		}
 	}
 }

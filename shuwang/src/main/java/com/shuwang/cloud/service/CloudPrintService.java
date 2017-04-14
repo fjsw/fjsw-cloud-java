@@ -8,20 +8,35 @@ import org.slf4j.LoggerFactory;
 
 public class CloudPrintService {
 	protected final Logger log = LoggerFactory.getLogger(getClass());
-	private GatewayProtocolService gatewayService = new GatewayProtocolService();
-	
+
+	private String appid = null;
+	private String appsecret = null;
+	private String gatewayUrl = null;
+
+	/**
+	 * check whether initialized
+	 * @return boolean
+	 */
 	public boolean isInitialized() {
-		return gatewayService.isInitialized();
+		return appid != null;
 	}
-	
-	public void initial(String url, String appid, String appsecret) {
-		gatewayService.initial(url, appid, appsecret);
+
+	/**
+	 * initial service
+	 * @param appid 应用编号
+	 * @param appsecret 应用秘钥
+	 * @param gatewayUrl 接口网关
+	 */
+	public void initial(String appid, String appsecret,String gatewayUrl) {
+		this.appid = appid;
+		this.appsecret = appsecret;
+		this.gatewayUrl = gatewayUrl;
 	}
 
 	public boolean sendPrint(long printid, int devid, String title, String printStream, int mode) {
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("method", "print.cloud.text");
-		params.put("appid", gatewayService.getAppid());
+		params.put("appid", appid);
 		params.put("timestamp", String.valueOf(System.currentTimeMillis()/1000));
 		params.put("printid", String.valueOf(printid));
 		params.put("devid", String.valueOf(devid));
@@ -29,10 +44,10 @@ public class CloudPrintService {
 		if (title!=null && !title.isEmpty()) {
 			params.put("title", title);
 		}
-		String signature = gatewayService.signRequest(params);
+		String signature = GatewayProtocolService.signRequest(params, appsecret);
 		params.put("sign", signature);
 		params.put("printstream", printStream);
-		String result = gatewayService.callDirect(params);
+		String result = GatewayProtocolService.callDirect(params, gatewayUrl);
 		log.debug("sendPrint() result={}", result);
 		return true;
 	}
@@ -40,7 +55,7 @@ public class CloudPrintService {
 	public boolean sendPrint(long printid, int devid, String title, String printStream, Integer mode, Integer ordermode, Integer timeout) {
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("method", "print.cloud.text");
-		params.put("appid", gatewayService.getAppid());
+		params.put("appid", appid);
 		params.put("timestamp", String.valueOf(System.currentTimeMillis()/1000));
 		params.put("printid", String.valueOf(printid));
 		params.put("devid", String.valueOf(devid));
@@ -56,10 +71,10 @@ public class CloudPrintService {
 		if (timeout != null) {
 			params.put("timeout", String.valueOf(timeout));
 		}
-		String signature = gatewayService.signRequest(params);
+		String signature = GatewayProtocolService.signRequest(params, appsecret);
 		params.put("sign", signature);
 		params.put("printstream", printStream);
-		String result = gatewayService.callDirect(params);
+		String result = GatewayProtocolService.callDirect(params, gatewayUrl);
 		log.debug("sendPrint() result={}", result);
 		return true;
 	}
