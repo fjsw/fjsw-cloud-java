@@ -3,13 +3,24 @@ package com.shuwang.cloud.test;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
+import com.google.gson.Gson;
+import com.shuwang.cloud.service.GatewayProtocolService;
+import com.shuwang.cloud.test.config.CloudPringConfig;
 import com.shuwang.cloud.test.model.Order;
 import com.shuwang.cloud.test.model.OrderItem;
 import com.shuwang.cloud.test.service.OrderPrintService;
+import com.shuwang.cloud.util.GsonUtils;
 
 public class Application {
 	public static void main(String[] args) {
+		printOrder();
+		//
+		onPrintStatusCallback("", CloudPringConfig.CLOUDPRINT_APPSECRET);
+	}
+	
+	static void printOrder() {
 		//
 		long orderid = System.currentTimeMillis();
 		int devid = 12039;
@@ -28,7 +39,7 @@ public class Application {
 		orderItem.setAmount("20");//菜品金额
 		orderItem.setName("鸡腿饭");//菜品
 		orderItem.setQuantity(1);//菜品数量
-		List<OrderItem>orderItems=new ArrayList<OrderItem>();
+		List<OrderItem> orderItems = new ArrayList<OrderItem>();
 		orderItems.add(orderItem);
 		order.setItems(orderItems);//菜品list集合
 		
@@ -43,5 +54,17 @@ public class Application {
 				System.out.println("fail");
 			}
 		}
+	}
+	
+	static void onPrintStatusCallback(String body, String appsecret) {
+		Gson gson = GsonUtils.getGson();
+		@SuppressWarnings("unchecked")
+		Map<String,Object> response = gson.fromJson(body, Map.class);
+		if (!GatewayProtocolService.checkSignEqual(response, appsecret)) {
+			System.out.println( "sign not equal");
+		} else {
+			System.out.println( "sign OK!");
+		}
+		
 	}
 }
