@@ -5,7 +5,7 @@
 
 	<groupId>info.shuwang.cloud</groupId>
 	<artifactId>fjsw-cloud-sdk</artifactId>
-	<version>1.0.4</version>
+	<version>1.0.5</version>
 	<name>fjsw-cloud-sdk</name>
 	<url>https://github.com/fjsw/fjsw-cloud-java</url>
 	<description>fujian shuwang cloud Java sdk </description>
