@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.shuwang.cloud.config.ShuwangCloudConfig;
 import com.shuwang.cloud.service.CloudPrintService;
-import com.shuwang.cloud.test.config.CloudPringConfig;
+import com.shuwang.cloud.test.config.CloudPrintConfig;
 import com.shuwang.cloud.test.model.Order;
 import com.shuwang.cloud.test.model.OrderItem;
 import com.shuwang.cloud.util.CloudPrintUtil;
@@ -18,9 +18,9 @@ public class OrderPrintService {
 	public boolean printOrder(Long orderid, Integer devid, String title,
 			String printStream) {
 		if (!cloudprintService.isInitialized()) {
-			cloudprintService.initial(CloudPringConfig.CLOUDPRINT_URL,
-					CloudPringConfig.CLOUDPRINT_APPID,
-					CloudPringConfig.CLOUDPRINT_APPSECRET);
+			cloudprintService.initial(CloudPrintConfig.CLOUDAPP_APPID,
+					CloudPrintConfig.CLOUDAPP_APPSECRET,
+					CloudPrintConfig.GATEWAY_URL);
 		}
 		boolean send = cloudprintService.sendPrint(orderid, devid, title,
 				printStream, mode);
