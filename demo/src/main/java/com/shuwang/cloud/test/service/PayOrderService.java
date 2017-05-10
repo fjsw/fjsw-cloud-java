@@ -1,11 +1,15 @@
 package com.shuwang.cloud.test.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.shuwang.cloud.config.ShuwangCloudConfig;
 import com.shuwang.cloud.service.CloudPayService;
 import com.shuwang.cloud.test.config.CloudPrintConfig;
 import com.shuwang.cloud.util.CloudPrintUtil;
 
 public class PayOrderService {
+    protected final Logger log = LoggerFactory.getLogger(getClass());
 	private CloudPayService cloudPayService = new CloudPayService();
 
 	public boolean printPayOrder(long payid, int devid, int amount,

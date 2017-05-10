@@ -3,6 +3,9 @@ package com.shuwang.cloud.test.service;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.shuwang.cloud.config.ShuwangCloudConfig;
 import com.shuwang.cloud.service.CloudPrintService;
 import com.shuwang.cloud.test.config.CloudPrintConfig;
@@ -11,6 +14,7 @@ import com.shuwang.cloud.test.model.OrderItem;
 import com.shuwang.cloud.util.CloudPrintUtil;
 
 public class OrderPrintService {
+    protected final Logger log = LoggerFactory.getLogger(getClass());
 	private CloudPrintService cloudprintService = new CloudPrintService();
 
 	private int mode = ShuwangCloudConfig.CLOUDPRINT_MODE_NORMAL;

@@ -5,6 +5,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gson.Gson;
 import com.shuwang.cloud.service.GatewayProtocolService;
 import com.shuwang.cloud.test.config.CloudPrintConfig;
@@ -15,11 +18,15 @@ import com.shuwang.cloud.test.service.PayOrderService;
 import com.shuwang.cloud.util.GsonUtils;
 
 public class Application {
+	protected static final Logger log = LoggerFactory
+			.getLogger(Application.class);
+
 	public static void main(String[] args) {
 		// printOrder();
 		payOrder();
 		//
-		onPrintStatusCallback("{\"sign\":\"0\"}",
+		onAppCallback(
+				"{\"appid\":\"12345\",\"method\":\"print.notify.status\",\"timestamp\":\"1494391030\",\"sign\":\"0\"}",
 				CloudPrintConfig.CLOUDAPP_APPSECRET);
 	}
 
@@ -33,10 +40,10 @@ public class Application {
 		//
 		PayOrderService payOrderService = new PayOrderService();
 		try {
-			payOrderService.printPayOrder(payid, devid, amount, title, body, tts);
+			payOrderService.printPayOrder(payid, devid, amount, title, body,
+					tts);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.warn(e.getMessage(), e);
 		}
 	}
 
@@ -44,6 +51,7 @@ public class Application {
 		//
 		long orderid = System.currentTimeMillis();
 		int devid = 12039;
+		// order
 		Order order = new Order();
 		order.setContactAddr("测试地址");
 		order.setContactName("数网");// 名字
@@ -54,7 +62,7 @@ public class Application {
 		order.setOrderSeq(1);// 第几单
 		order.setShopName("测试店铺");// 店铺名称
 		order.setTotalAmount("20");// 总金额
-
+		// order item
 		OrderItem orderItem = new OrderItem();
 		orderItem.setAmount("20");// 菜品金额
 		orderItem.setName("鸡腿饭");// 菜品
@@ -63,29 +71,55 @@ public class Application {
 		orderItems.add(orderItem);
 		order.setItems(orderItems);// 菜品list集合
 
-		//
+		// 发送订单打印到设备
 		OrderPrintService orderPrintService = new OrderPrintService();
 		for (int i = 0; i < 3; i++) {
 			boolean success = orderPrintService.printOrder(orderid, devid,
 					order);
 			if (success) {
-				System.out.println("success");
+				log.debug("printOrder() success");
 				break;
 			} else {
-				System.out.println("fail");
+				log.debug("printOrder() fail");
 			}
 		}
 	}
 
-	static void onPrintStatusCallback(String body, String appsecret) {
+	static void onAppCallback(String body, String appsecret) {
 		Gson gson = GsonUtils.getGson();
 		@SuppressWarnings("unchecked")
 		Map<String, Object> response = gson.fromJson(body, Map.class);
 		if (!GatewayProtocolService.checkSignEqual(response, appsecret)) {
-			System.out.println("sign not equal");
+			log.debug("sign not equal");
+			return;
 		} else {
-			System.out.println("sign OK!");
+			log.debug("sign OK!");
 		}
+		//
+		String method = response.get("method").toString();
+		if (method.equals("print.notify.status")) {
+			onPrintStatusChange(response);
+		} else if (method.equals("order.notify.status")) {
+			onOrderStatusChange(response);
+		} else {
+			log.info("method({}) unknown!");
+		}
+	}
 
+	static void onPrintStatusChange(Map<String, Object> response) {
+		long printid = Long.parseLong(response.get("printid").toString());
+		int devid = Integer.parseInt(response.get("devid").toString());
+		int status = Integer.parseInt(response.get("status").toString());
+		log.debug("onPrintStatusChange() printid={}, devid={}, status={}",
+				printid, devid, status);
+	}
+
+	static void onOrderStatusChange(Map<String, Object> response) {
+		long printid = Long.parseLong(response.get("printid").toString());
+		int devid = Integer.parseInt(response.get("devid").toString());
+		int orderstatus = Integer.parseInt(response.get("orderstatus")
+				.toString());
+		log.debug("onOrderStatusChange() printid={}, devid={}, orderstatus={}",
+				printid, devid, orderstatus);
 	}
 }
